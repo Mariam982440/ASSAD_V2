@@ -1,7 +1,8 @@
-<?php
-require_once 'database.php';
-class Animal {
 
+<?php
+require_once 'Database.php';
+
+class Animal {
     private $id;
     private $nom;
     private $espece;
@@ -9,9 +10,9 @@ class Animal {
     private $image;
     private $paysorigine;
     private $desc_courte;
+    private $id_habitat; 
 
-
-    public function __construct($nom, $espece, $alimentation, $image, $paysorigine, $desc_courte) {
+    public function __construct($nom, $espece, $alimentation, $image, $paysorigine, $desc_courte, $id_habitat, $id = null) {
         $this->id = $id;
         $this->nom = $nom;
         $this->espece = $espece;
@@ -19,9 +20,7 @@ class Animal {
         $this->image = $image;
         $this->paysorigine = $paysorigine;
         $this->desc_courte = $desc_courte;
-        $database = new Database(); 
-        $this->db = $database->getConnection();
-    
+        $this->id_habitat = $id_habitat; 
     }
 
     public function getId() { return $this->id; }
@@ -39,30 +38,36 @@ class Animal {
     public function setImage($image) { $this->image = $image; }
     public function setPaysorigine($paysorigine) { $this->paysorigine = $paysorigine; }
     public function setDesc_courte($desc_courte) { $this->desc_courte = $desc_courte; }
-    
 
+    public function ajouterAnimal() {
+        $database = new Database();
+        $db = $database->getConnection();
 
-    public static function creeVisite($titre, $langue, $prix,$duree,$capacite,$dateheure,$satut,$id_utilisateur){
-
-        $database = new Database(); 
-        $this->db = $database->getConnection();
+        $sql = "INSERT INTO animal (nom_al, espece, alimentation, image, paysorigine, descriptioncourte, id_habitat) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         
-        $imageName = "";
-        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            $imageName = time() . "_" . $_FILES['image']['name']; 
-            move_uploaded_file($_FILES['image']['tmp_name'], "../uploads/" . $imageName);
-        }
+        $stmt = $db->prepare($sql);
 
-        $sql = "INSERT INTO animal (nom_al, espece, paysorigine, descriptioncourte, id_habitat, image) 
-                VALUES ('$nom', '$espece', '$pays', '$desc', '$habitat', '$imageName')";
+        return $stmt->execute([
+            $this->nom,
+            $this->espece,
+            $this->alimentation,
+            $this->image,
+            $this->paysorigine,
+            $this->desc_courte,
+            $this->id_habitat
+        ]);
+    }
 
-        if (mysqli_query($conn, $sql)) {
-            header("Location: ../animal.php"); 
-            exit();
-        } else {
-            $message = "Erreur SQL : " . mysqli_error($conn);
-        }
-       
+    public static function getListanimaux() {
+        $database = new Database();
+        $db = $database->getConnection();
+        $sql = "SELECT a.*, h.nom_hab 
+                FROM animal a 
+                LEFT JOIN habitatt h ON a.id_habitat = h.id_hab";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

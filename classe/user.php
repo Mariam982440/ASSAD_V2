@@ -1,4 +1,5 @@
 <?php
+
 require_once 'Database.php';
 
 class User {
@@ -68,7 +69,7 @@ class User {
         if ($role == 'admin') {
             return "Action interdite."; 
         }
-        
+
         // pour l'approbation guide = 0 autres = 1
         $est_approuve = ($role == 'guide') ? 0 : 1;
             
@@ -89,3 +90,5 @@ class User {
 }
 
 ?>
+
+

@@ -37,8 +37,7 @@ class Visite {
     public function setStatut($statut) { $this->statut = $statut; }
 
 
-    public static function creerVisite($titre, $langue, $prix, $duree, $capacite, $dateheure,
-        $statut, $id_utilisateur, $etapes_titres = [], $etapes_descs = [],$ordre = []) {
+    public function enregistrer($etapes_titres = [], $etapes_descs = [], $etapes_ordres = []) {
         
         $database = new Database();
         $db = $database->getConnection();
@@ -48,26 +47,31 @@ class Visite {
         
         $stmt = $db->prepare($sql_tours);
         
-        if ($stmt->execute([$titre, $dateheure, $langue, $capacite, $duree, $prix, $statut, $id_utilisateur])) {
+        if ($stmt->execute([
+            $this->titre,       
+            $this->dateheure,
+            $this->langue,
+            $this->capacite,
+            $this->duree,
+            $this->prix,
+            $this->statut,
+            $this->id_utilisateur
+        ])) {
             
-            $id_insr = $db->lastInsertId();
+            $this->id = $db->lastInsertId(); 
 
             if (!empty($etapes_titres) && is_array($etapes_titres)) {
                 
-                $sql_etape = "INSERT INTO etapesvisite (titreetape, descriptionetape, ordreetape, id_visite) VALUES (?, ?, ?, ?)";
-                $stmt_etape = $db->prepare($sql_etape);
+                require_once 'Etape.php'; 
 
-                // on boucle sur chaque titre reçu
                 for ($i = 0; $i < count($etapes_titres); $i++) {
                     
                     $desc = isset($etapes_descs[$i]) ? $etapes_descs[$i] : "";
+                    $ordre = isset($etapes_ordres[$i]) ? $etapes_ordres[$i] : ($i + 1);
+
+                    $nouvelleEtape = new Etape($etapes_titres[$i], $desc, $ordre, $this->id);
                     
-                    $stmt_etape->execute([
-                        $etapes_titres[$i], 
-                        $desc, 
-                        $ordre[$i],   
-                        $id_insr    
-                    ]);
+                    $nouvelleEtape->enregistrer($db);
                 }
             }
 

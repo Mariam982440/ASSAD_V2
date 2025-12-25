@@ -1,0 +1,16 @@
+/assad-zoo
+│
+├── classes/
+│   ├── Database.php      # Connexion BDD (PDO)
+│   ├── User.php          # CLASSE PARENT (Abstraite ou non)
+│   ├── Guide.php         # ENFANT (extends User)
+│   ├── Visiteur.php      # ENFANT (extends User)
+│   └── Admin.php         # ENFANT (extends User)
+│
+├── guide/
+│   └── add_tours.php     # Page utilisant la classe Guide
+├── visitor/
+│   └── book.php          # Page utilisant la classe Visiteur
+│
+├── login.php             # Page de connexion (Utilise la Factory)
+└── ...

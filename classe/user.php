@@ -64,12 +64,12 @@ class User {
             return "Cet email est déjà utilisé.";
         }
 
-        // pour l'approbation guide = 0 autres = 1
         // le role admin est interdit
         if ($role == 'admin') {
             return "Action interdite."; 
         }
-           
+        
+        // pour l'approbation guide = 0 autres = 1
         $est_approuve = ($role == 'guide') ? 0 : 1;
             
         // hashage du mot de passe

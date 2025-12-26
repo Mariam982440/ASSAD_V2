@@ -69,5 +69,53 @@ class Animal {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function getPays() {
+        $database = new Database();
+        $db = $database->getConnection();
+        
+        $sql = "SELECT DISTINCT paysorigine FROM animal WHERE paysorigine IS NOT NULL AND paysorigine != '' ORDER BY paysorigine ASC";
+        $stmt = $db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
+    public static function rechercher($id_habitat = null, $pays = null, $recherche_nom = null) {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        
+        $sql = "SELECT a.*, h.nom_hab 
+                FROM animal a 
+                LEFT JOIN habitatt h ON a.id_habitat = h.id_hab 
+                WHERE 1=1"; 
+
+        $params = [];
+
+        // filtre Habitat
+        if (!empty($id_habitat)) {
+            $sql .= " AND a.id_habitat = ?";
+            $params[] = $id_habitat;
+        }
+
+        // filtre Pays
+        if (!empty($pays)) {
+            $sql .= " AND a.paysorigine = ?";
+            $params[] = $pays;
+        }
+
+        // filtre recherche nom 
+        if (!empty($recherche_nom)) {
+            $sql .= " AND a.nom_al LIKE ?";
+            $params[] = "%" . $recherche_nom . "%";
+        }
+
+        $sql .= " ORDER BY a.id_al DESC";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
+
 ?>

@@ -2,16 +2,21 @@
 require_once 'User.php';
 
 class Visiteur extends User {
+    
+    private $estActif;
 
-    public function __construct($id, $nom, $email) {
+    public function __construct($id, $nom, $email, $estActif) {
         parent::__construct($id, $nom, $email, 'visiteur');
+        $this->estActif = $estActif;
     }
 
-    public function reserverVisite($idVisite, $nbPersonnes) {
-        
-        $sql = "INSERT INTO reservations (nbpersonnes, id_visite, id_utilisateur) VALUES (?, ?, ?)";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$nbPersonnes, $idVisite, $this->id]);
+    public function isActif() {
+        return $this->estActif == 1;
+    }
+
+    // methode pour l'admin
+    public function desactiver() {
+        $this->estActif = 0;
     }
 }
 ?>

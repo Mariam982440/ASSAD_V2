@@ -7,9 +7,7 @@ require_once 'classe/Admin.php';
 
 $message = "";
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
 
     if (isset($_POST['btn_register'])) {
         $nom = $_POST['nom'];
@@ -21,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $resultat = User::inscrire($nom, $email, $pass, $role);
 
         if ($resultat === true) {
-            // c'est un succès
             if ($role == 'guide') {
                 $message = "<div class='bg-blue-100 text-blue-700 p-3 rounded mb-4'>Compte créé ! En attente de validation admin.</div>";
             } else {
@@ -52,11 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // redirection
             if ($_SESSION['user_role'] == 'guide') {
-                header("Location: add_tours.php"); 
+                header("Location: animal.php"); 
             } elseif ($_SESSION['user_role'] == 'visiteur') {
                 header("Location: animal.php");
             } else {
-                header("Location: admin/admin_panel.php");
+                header("Location: animal.php");
             }
             exit();
 
@@ -66,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-?>
+
 <!-- HTML du login... -->
 
 <!DOCTYPE html>

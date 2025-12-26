@@ -2,17 +2,17 @@
 require_once 'User.php';
 
 class Guide extends User {
+    private $estApprouve;
 
-    public function __construct($id, $nom, $email) {
+    public function __construct($id, $nom, $email, $estApprouve) {
         parent::__construct($id, $nom, $email, 'guide');
+        
+        $this->estApprouve = $estApprouve;
     }
 
-    
-
-    public function getMesVisites() {
-        $stmt = $this->db->prepare("SELECT * FROM visite_guidee WHERE id_utilisateur = ?");
-        $stmt->execute([$this->id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function isApprouve() {
+        return $this->estApprouve == 1; 
     }
+
 }
 ?>

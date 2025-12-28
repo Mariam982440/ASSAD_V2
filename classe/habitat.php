@@ -1,5 +1,5 @@
 <?php
-require_once 'Database.php';
+require_once 'database.php';
 
 class Habitat {
     private $id;
@@ -45,30 +45,6 @@ class Habitat {
     }
 
     
-    public function modifier() {
-        if ($this->id === null) return false;
-
-        $sql = "UPDATE habitatt SET nom_hab = ?, typeclimat = ?, description_hab = ?, zonezoo = ? 
-                WHERE id_hab = ?";
-        
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
-            $this->nom, 
-            $this->typeClimat, 
-            $this->description, 
-            $this->zoneZoo, 
-            $this->id
-        ]);
-    }
-
-    
-    public function supprimer() {
-        if ($this->id === null) return false;
-
-        $stmt = $this->db->prepare("DELETE FROM habitatt WHERE id_hab = ?");
-        return $stmt->execute([$this->id]);
-    }
-
     
     public static function getAll() {
         $database = new Database();

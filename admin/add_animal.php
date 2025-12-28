@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Ajouter un nouvel Animal</h2>
-            <a href="../asaad.php" class="text-blue-600 hover:underline">Retour au catalogue</a>
+            <a href="../animal.php" class="text-blue-600 hover:underline">Retour au catalogue</a>
         </div>
 
         <?= $message ?>

@@ -76,6 +76,23 @@ class Animal {
         return null;
     }
 
+     public function modifier() {
+        $db = (new Database())->getConnection();
+        
+        // si une nouvelle image est définie
+        // sinon 
+        $sql = "UPDATE animal SET 
+                nom_al = ?, espece = ?, alimentation = ?, image = ?, 
+                paysorigine = ?, descriptioncourte = ?, id_habitat = ? 
+                WHERE id_al = ?";
+        
+        $stmt = $db->prepare($sql);
+        return $stmt->execute([
+            $this->nom, $this->espece, $this->alimentation, $this->image,
+            $this->paysorigine, $this->desc_courte, $this->id_habitat, $this->id
+        ]);
+    }
+
     public static function getListanimaux() {
         $database = new Database();
         $db = $database->getConnection();

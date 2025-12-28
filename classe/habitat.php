@@ -98,9 +98,36 @@ class Habitat {
         }
         return null;
     }
+
+    public function modifier() {
+        if ($this->id === null) return false;
+
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $sql = "UPDATE habitatt SET nom_hab = ?, typeclimat = ?, description_hab = ?, zonezoo = ? 
+                WHERE id_hab = ?";
+        
+        $stmt = $db->prepare($sql);
+        
+        return $stmt->execute([
+            $this->nom, 
+            $this->typeClimat, 
+            $this->description, 
+            $this->zoneZoo, 
+            $this->id
+        ]);
+    }
+
+    public static function supprimer($id) {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        $stmt = $db->prepare("DELETE FROM habitatt WHERE id_hab = ?");
+        return $stmt->execute([$id]);
+    }
 }
 ?>
 
-<?php
-require_once 'Database.php';
+
 

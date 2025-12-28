@@ -93,6 +93,14 @@ class Animal {
         ]);
     }
 
+    public static function supprimer($id) {
+        $db = (new Database())->getConnection();
+        
+
+        $stmt = $db->prepare("DELETE FROM animal WHERE id_al = ?");
+        return $stmt->execute([$id]);
+    }
+
     public static function getListanimaux() {
         $database = new Database();
         $db = $database->getConnection();

@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST['password'];
 
         $utilisateur = User::authentifier($email, $password);
+        
 
         if ($utilisateur === "NonApprouve") {
             $message = "<div class='bg-yellow-100 text-yellow-800 p-3 rounded mb-4'>Compte non approuvé.</div>";

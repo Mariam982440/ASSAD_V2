@@ -31,7 +31,7 @@ class Animal {
     public function getPaysorigine() { return $this->paysorigine; }
     public function getDesc_courte() { return $this->desc_courte; }
    
-
+    public function setIdHabitat($id) { $this->id_habitat = $id; }
     public function setNom($nom) { $this->nom = $nom; }
     public function setEspece($espece) { $this->espece = $espece;}
     public function setAlimentation($alimentation) { $this->alimentation = $alimentation; }
@@ -57,6 +57,23 @@ class Animal {
             $this->desc_courte,
             $this->id_habitat
         ]);
+    }
+    // --- recuperer l'animal par id pour pré-remplir le formulaire ---
+    public static function getById($id) {
+        $db = (new Database())->getConnection();
+        $stmt = $db->prepare("SELECT * FROM animal WHERE id_al = ?");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($data) {
+            // on retourne un objet animal
+            return new Animal(
+                $data['nom_al'], $data['espece'], $data['alimentation'], 
+                $data['image'], $data['paysorigine'], $data['descriptioncourte'], 
+                $data['id_habitat'], $data['id_al']
+            );
+        }
+        return null;
     }
 
     public static function getListanimaux() {
